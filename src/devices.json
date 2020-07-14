@@ -1,0 +1,210 @@
+
+{
+    "title": "Devices",
+    "type": "object",
+    "properties": {
+        "chunksize": {
+            "type": "integer",
+            "default": 1024
+        },
+        "samplerate": {
+            "type": "integer",
+            "default": 44100
+        },
+        "target_level": {
+            "type": "integer",
+            "default": 1024
+        },
+        "adjust_period": {
+            "type": "integer",
+            "default": 10
+        },
+        "enable_resampling": {
+            "type": "boolean",
+            "default": false
+        },
+        "resampler_type": {
+            "type": "string",
+            "enum": [
+                "FastAsync",
+                "BalancedAsync",
+                "AccurateAsync",
+                "Synchronous"
+            ],
+            "default": "Synchronous"
+        },
+        "capture_samplerate": {
+            "type": "integer",
+            "default": 44100
+        },
+        "capture": {
+            "title": "Capture device",
+            "$ref": "#/definitions/capture"
+        },
+        "playback": {
+            "title": "Playback device",
+            "$ref": "#/definitions/playback"
+        }
+    },
+    "definitions": {
+        "format": {
+            "type": "string",
+            "enum": [
+                "S16LE",
+                "S24LE",
+                "S24LE3",
+                "S32LE",
+                "FLOAT32LE",
+                "FLOAT64LE"
+            ],
+            "default": "S24LE" 
+        },
+        "capture": {
+            "title": "Capture",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "Alsa",
+                        "File"
+                    ],
+                    "default": "Alsa"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "dependencies": {
+                "type": {
+                    "oneOf": [
+                        {
+                            "properties": {
+                                "type": {
+                                    "enum": [
+                                        "Alsa"
+                                    ]
+                                },
+                                "device": {
+                                    "type": "string",
+                                    "default": "hw:0"
+                                },
+                                "channels": {
+                                    "type": "integer",
+                                    "default": 2
+                                },
+                                "format": {
+                                    "$ref": "#/definitions/format"
+                                }
+                            },
+                            "required": [
+                                "device", "channels"
+                            ]
+                        },
+                        {
+                            "properties": {
+                                "type": {
+                                    "enum": [
+                                        "File"
+                                    ]
+                                },
+                                "filename": {
+                                    "type": "string",
+                                    "default": "/dev/stdin"
+                                },
+                                "channels": {
+                                    "type": "integer",
+                                    "default": 2
+                                },
+                                "extra_samples": {
+                                    "type": "integer",
+                                    "default": 0
+                                },
+                                "skip_bytes": {
+                                    "type": "integer",
+                                    "default": 0
+                                },
+                                "read_bytes": {
+                                    "type": "integer",
+                                    "default": 0
+                                }
+                            },
+                            "required": [
+                                "filename", "channels"
+                            ]
+                        }
+                    ]
+                }
+            }
+        },
+        "playback": {
+            "title": "Playback",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "Alsa",
+                        "File",
+                        "PulseAudio",
+                        "CoreAudio",
+                        "WASAPI"
+                    ],
+                    "default": "Alsa"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "dependencies": {
+                "type": {
+                    "oneOf": [
+                        {
+                            "properties": {
+                                "type": {
+                                    "enum": [
+                                        "Alsa", "PulseAudio", "WASAPI", "CoreAudio"
+                                    ]
+                                },
+                                "device": {
+                                    "type": "string",
+                                    "default": "hw:0"
+                                },
+                                "channels": {
+                                    "type": "integer",
+                                    "default": 2
+                                },
+                                "format": {
+                                    "$ref": "#/definitions/format"
+                                }
+                            },
+                            "required": [
+                                "device", "channels"
+                            ]
+                        },
+                        {
+                            "properties": {
+                                "type": {
+                                    "enum": [
+                                        "File"
+                                    ]
+                                },
+                                "file": {
+                                    "type": "string",
+                                    "default": "/dev/stdin"
+                                },
+                                "channels": {
+                                    "type": "integer",
+                                    "default": 2
+                                }
+                            },
+                            "required": [
+                                "file", "channels"
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}
