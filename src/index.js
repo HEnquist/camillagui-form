@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import devices from './devices.json';
+import filters from './filters.json';
 import Form from "@rjsf/core";
 import * as serviceWorker from './serviceWorker';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
@@ -36,7 +37,10 @@ const Component = (
         onError={log("errors")} />
     </TabPanel>
     <TabPanel>
-      <h2>Any content 2</h2>
+    <Form schema={filters}
+        onChange={log("changed")}
+        onSubmit={log("submitted")}
+        onError={log("errors")} />
     </TabPanel>
     <TabPanel>
       <h2>Any content 3</h2>
