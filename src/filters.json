@@ -1,0 +1,233 @@
+
+{
+    "title": "Filters",
+    "type": "object",
+    "additionalProperties": {
+      "type": "object",
+      "allOf": [
+        {
+            "$ref": "#/definitions/filter"
+        }
+      ]
+    },
+    "definitions": {
+        "format": {
+            "type": "string",
+            "enum": [
+                "S16LE",
+                "S24LE",
+                "S24LE3",
+                "S32LE",
+                "FLOAT32LE",
+                "FLOAT64LE",
+                "TEXT"
+            ],
+            "default": "FLOAT32LE" 
+        },
+        "filter": {
+            "title": "Filter",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "Biquad",
+                        "Conv",
+                        "Delay"
+                    ]
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "dependencies": {
+                "type": {
+                    "oneOf": [
+                        {
+                            "properties": {
+                                "type": {
+                                    "enum": [
+                                        "Biquad"
+                                    ]
+                                },
+                                "parameters": {
+                                    "$ref": "#/definitions/biquad"
+                                    
+                                }
+                            },
+                            "required": [
+                                "parameters"
+                            ]
+                        }
+                    ]
+                }
+            }
+        },
+        "biquad": {
+            "title": "Biquad",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "Lowpass",
+                        "Lowshelf",
+                        "Highpass",
+                        "Highshelf",
+                        "Peaking",
+                        "Notch",
+                        "Bandpass",
+                        "Allpass",
+                        "LowpassFO",
+                        "LowshelfFO",
+                        "HighpassFO",
+                        "HighshelfFO",
+                        "LinkwitzTransform"
+                    ],
+                    "example": "Lowpass"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "dependencies": {
+                "type": {
+                    "oneOf": [
+                        {
+                            "properties": {
+                                "type": {
+                                    "enum": [
+                                        "Lowpass", "Highpass", "Bandpass", "Notch", "Allpass"
+                                    ]
+                                },
+                                "freq": {
+                                    "type": "number",
+                                    "example": "1000"
+                                },
+                                "q": {
+                                    "type": "number",
+                                    "example": 0.5
+                                }
+                            },
+                            "required": [
+                                "freq", "q"
+                            ]
+                        },
+                        {
+                            "properties": {
+                                "type": {
+                                    "enum": [
+                                        "LowpassFO", "HighpassFO", "AllpassFO"
+                                    ]
+                                },
+                                "freq": {
+                                    "type": "number",
+                                    "example": "1000"
+                                }
+                            },
+                            "required": [
+                                "freq"
+                            ]
+                        },
+                        {
+                            "properties": {
+                                "type": {
+                                    "enum": [
+                                        "Peaking"
+                                    ]
+                                },
+                                "freq": {
+                                    "type": "number",
+                                    "example": "1000"
+                                },
+                                "q": {
+                                    "type": "number",
+                                    "example": 0.5
+                                },
+                                "gain": {
+                                    "type": "number",
+                                    "example": 5.0
+                                }
+                            },
+                            "required": [
+                                "freq", "q", "gain"
+                            ]
+                        },
+                        {
+                            "properties": {
+                                "type": {
+                                    "enum": [
+                                        "Lowshelf", "Highshelf"
+                                    ]
+                                },
+                                "freq": {
+                                    "type": "number",
+                                    "example": "1000"
+                                },
+                                "slope": {
+                                    "type": "number",
+                                    "example": 0.5
+                                },
+                                "gain": {
+                                    "type": "number",
+                                    "example": 6.0
+                                }
+                            },
+                            "required": [
+                                "freq", "slope", "gain"
+                            ]
+                        },
+                        {
+                            "properties": {
+                                "type": {
+                                    "enum": [
+                                        "LowshelfFO", "HighshelfFO"
+                                    ]
+                                },
+                                "freq": {
+                                    "type": "number",
+                                    "example": "1000"
+                                },
+                                "gain": {
+                                    "type": "number",
+                                    "example": 6.0
+                                }
+                            },
+                            "required": [
+                                "freq", "gain"
+                            ]
+                        },
+                        {
+                            "properties": {
+                                "type": {
+                                    "enum": [
+                                        "LinkwitzTransform"
+                                    ]
+                                },
+                                "freq_act": {
+                                    "type": "number",
+                                    "example": "100"
+                                },
+                                "q_act": {
+                                    "type": "number",
+                                    "example": 1.5
+                                },
+                                "freq_target": {
+                                    "type": "number",
+                                    "example": 20
+                                },
+                                "q_target": {
+                                    "type": "number",
+                                    "example": 0.7
+                                }
+                            },
+                            "required": [
+                                "freq_act", "q_act", "freq_target", "q_target"
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}
